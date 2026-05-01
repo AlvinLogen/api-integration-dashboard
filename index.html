@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>API Integration Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      // Extend Tailwind with a customer slow-spin animation for loading spinners
+      tailwind.config = {
+        theme: {
+          extend: {
+            animation: {
+              "spin-slow": "spin 1.2s linear infinite",
+            },
+          },
+        },
+      };
+    </script>
+  </head>
+  <body class="bg-slate-100 text-slate-800 min-h-screen font-sans">
+    <!-- Skip link — keyboard accessibility -->
+    <a
+      href="#dashboard"
+      class="sr-only focus:not-sr-only focus:absolute focus:top-0 focus:left-0 focus:bg-slate-800 focus:text-white focus:px-4 focus:py-2 focus:z-50 focus:rounded-br-lg focus:text-sm"
+      >Skip to dashboard</a
+    >
+    <header class="bg-slate-800 text-white shadow-lg">
+      <div class="max-w-6xl mx-auto px-6 py-5">
+        <h1 class="text-2xl font-bold text-center tracking-tight">
+          API Integration Dashboard
+        </h1>
+        <p class="text-slate-400 text-center text-sm mt-1">
+          Live data from Github, Weather &amp; News APIs
+        </p>
+      </div>
+    </header>
+
+    <main id="dashboard" class="max-w-6xl mx-auto px-4 py-8">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!--PANEL 1: Github-->
+        <section
+          id="github-panel"
+          class="bg-white rounded-xl shadow-md p-6 flex flex-col"
+          aria-label="Github profile lookup"
+        >
+          <h2
+            class="text-base font-semibold text-slate-700 mb-4 pb-2 border-b border-slate-200 flex items-center gap-2"
+          >
+            <svg
+              class="w-5 h-5 shrink-0"
+              fill="currentColor"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <path
+                d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57
+              0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695
+              -.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99
+              .105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225
+              -.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405
+              c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225
+              0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3
+              0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"
+              />
+              Github Profile
+            </svg>
+          </h2>
+          <div class="flex gap-2 mb-4">
+            <label for="github-input" class="sr-only">Github username</label>
+            <input
+              id="github-input"
+              type="text"
+              placeholder="e.g. torvalds"
+              autocomplete="off"
+              spellcheck="false"
+              class="flex-1 border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-slate-500 focus:border-transparent transition-shadow"
+            />
+            <button
+              id="github-search-btn"
+              class="bg-slate-700 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-1 transition-colors"
+            >
+              Search
+            </button>
+          </div>
+          <div
+            id="github-result"
+            class="text-sm text-slate-400 flex-1"
+            aria-live="polite"
+          >
+            Enter a Github username above.
+          </div>
+        </section>
+        <!--PANEL 2: Weather-->
+        <section
+          id="weather-panel"
+          class="bg-white rounded-xl shadow-md p-6 flex flex-col"
+          aria-label="Current weather lookup"
+        >
+          <h2
+            class="text-base font-semibold text-slate-700 mb-4 pb-2 border-b border-slate-200 flex items-center gap-2"
+          >
+            <span aria-hidden="true" class="text-lg">🌤️</span>Current Weather
+          </h2>
+          <div class="flex gap-2 mb-4">
+            <label for="weather-input" class="sr-only">City Name</label
+            ><input
+              id="weather-input"
+              type="text"
+              placeholder="e.g. London"
+              autocomplete="off"
+              class="flex-1 border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-shadow"
+            />
+            <button
+              id="weather-search-btn"
+              class="bg-sky-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-1 transition-colors"
+            >
+              Search
+            </button>
+          </div>
+
+          <div
+            id="weather-result"
+            class="text-sm text-slate-400 flex-1"
+            aria-live="polite"
+          >
+            Enter a city name above.
+          </div>
+        </section>
+
+        <!--PANEL 3: News-->
+        <section
+          id="news-panel"
+          class="bg-white rounded-xl shadow-md p-6 flex flex-col"
+          aria-label="Latest technology news headlines"
+        >
+          <h2
+            class="text-base font-semibold text-slate-700 mb-4 pb-2 border-b border-slate-200 flex items-center gap-2"
+          >
+            <span aria-hidden="true" class="text-lg">📰</span>Latest Tech News
+          </h2>
+          <button
+            id="news-refresh-btn"
+            class="w-full mb-4 bg-emerald-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-1 transition-colors"
+          >
+            Load Headlines
+          </button>
+          <div
+            id="news-result"
+            class="text-sm text-slate-400 flex-1"
+            aria-live="polite"
+          >
+            Click "Load Headlines" to fetch the latest news
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <footer
+      class="text-center text-slate-400 text-xs py-6 border-t border-slate-200"
+    >
+      API Integration Dashboard
+    </footer>
+    <script src="config.js"></script>
+    <script src="utils.js"></script>
+    <script src="github.js"></script>
+    <script src="weather.js"></script>
+    <script src="news.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>

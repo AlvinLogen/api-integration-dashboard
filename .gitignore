@@ -1,0 +1,19 @@
+# API keys
+config.js
+
+# OS files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Editor files
+.vscode/
+*.swp
+
+# Dependencies
+node_modules/
+project/
+
+# Environment files
+.env
+.env.local
