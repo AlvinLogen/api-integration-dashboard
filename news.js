@@ -5,7 +5,7 @@ async function fetchNews() {
     const url =
       "https://content.guardianapis.com/search" +
       "?section=technology" +
-      "&show-fields-trailText" +
+      "&show-fields=trailText" +
       "&page-size=6" +
       "&order-by=newest" +
       "&api-key=" +
