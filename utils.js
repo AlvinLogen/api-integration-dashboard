@@ -49,7 +49,7 @@ function setError(containerId, message) {
 
   container.innerHTML =
     '<div class="bg-red-50 border border-red-200 text-red-700 rounded-lg">' +
-    "<strong>Error:</strong>" +
+    "<strong>Error: </strong>" +
     escapeHtml(message) +
     "</div>";
 }
