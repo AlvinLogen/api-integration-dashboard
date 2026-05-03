@@ -29,7 +29,7 @@ async function fetchNews() {
     const data = await response.json();
     renderNews(data.response.results);
   } catch (err) {
-    setError("news-result", err.message);
+    setError("news-result", err.message, fetchNews);
   }
 }
 
@@ -41,6 +41,11 @@ async function renderNews(articles) {
       '<p class="text-slate-400 text-sm">No headlines available right now.</p>';
     return;
   }
+
+  const now = new Date().toLocaleTimeString("en-GB", {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
 
   const articlesHtml = articles
     .map(function (article) {
@@ -75,5 +80,9 @@ async function renderNews(articles) {
     })
     .join("");
 
-  container.innerHTML = articlesHtml;
+  container.innerHTML =
+    '<p class="text-slate-300 text-sm mb-3">Updated at ' +
+    now +
+    "</p>" +
+    articlesHtml;
 }

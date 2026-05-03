@@ -24,7 +24,9 @@ async function fetchGitHubUser(username) {
     const data = await response.json();
     renderGitHubProfile(data);
   } catch (err) {
-    setError("github-result", err.message);
+    setError("github-result", err.message, function () {
+      fetchGitHubUser(document.getElementById("github-input").value.trim());
+    });
   }
 }
 
