@@ -41,7 +41,9 @@ async function fetchWeather(city) {
     const data = await response.json();
     renderWeather(data);
   } catch (err) {
-    setError("weather-result", err.message);
+    setError("weather-result", err.message, function () {
+      fetchWeather(document.getElementById("weather-input").value.trim());
+    });
   }
 }
 

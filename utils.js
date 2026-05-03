@@ -43,13 +43,24 @@ function setLoading(containerId, message) {
 }
 
 // Error State: Let the user know an error occurred while the waiting for an API response
-function setError(containerId, message) {
+function setError(containerId, message, retryFn) {
   const container = document.getElementById(containerId);
   if (!container) return;
 
+  const retryButton = retryFn
+    ? '<button onclick="(' +
+      retryFn.toString() +
+      ')()" ' +
+      'class="mt-2 text-xs text-red-600 underline hover:no-underline ' +
+      'focus:outline-none focus:ring-1 focus:ring-red-400 rounded">' +
+      "Try again" +
+      "</button>"
+    : "";
+
   container.innerHTML =
-    '<div class="bg-red-50 border border-red-200 text-red-700 rounded-lg">' +
-    "<strong>Error: </strong>" +
+    '<div class="bg-red-50 border border-red-200 text-red-700 rounded-lg p-3 text-sm" role="alert">' +
+    "<strong>Error:</strong> " +
     escapeHtml(message) +
+    retryButton +
     "</div>";
 }
