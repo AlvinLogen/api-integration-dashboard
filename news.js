@@ -69,7 +69,7 @@ async function renderNews(articles) {
         articleUrl +
         '" target="_blank" rel="noopener noreferrer" ' +
         'class="font-medium text-slate-700 hover:text-slate-900 hover:underline ' +
-        'text-xs leading-relaxed block mb-1">' +
+        'text-xs leading-relaxed block mb-1" aria-label="Read">' +
         title +
         "</a>" +
         '<p class="text-slate-400 text-xs">' +
