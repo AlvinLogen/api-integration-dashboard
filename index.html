@@ -88,7 +88,32 @@
             class="text-sm text-slate-400 flex-1"
             aria-live="polite"
           >
-            Enter a Github username above.
+            <p class="text-xs">
+              Search any GitHub username to see their profile, repositories, and
+              stats.
+            </p>
+            <p class="text-xs mt-2 text-slate-300">
+              Try:
+              <button
+                onclick="
+                  document.getElementById('github-input').value = 'torvalds';
+                  document.getElementById('github-search-btn').click();
+                "
+                class="underline hover:no-underline focus:outline-none"
+              >
+                torvalds
+              </button>
+              or
+              <button
+                onclick="
+                  document.getElementById('github-input').value = 'gaearon';
+                  document.getElementById('github-search-btn').click();
+                "
+                class="underline hover:no-underline focus:outline-none"
+              >
+                gaearon
+              </button>
+            </p>
           </div>
         </section>
         <!--PANEL 2: Weather-->
