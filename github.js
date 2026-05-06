@@ -23,6 +23,7 @@ async function fetchGitHubUser(username) {
 
     const data = await response.json();
     renderGitHubProfile(data);
+    fetchGitHubRepos(data.login);
   } catch (err) {
     setError("github-result", err.message, function () {
       fetchGitHubUser(document.getElementById("github-input").value.trim());
@@ -118,4 +119,100 @@ function renderGitHubProfile(data) {
     'focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-1">' +
     "View Profile on GitHub →" +
     "</a>";
+}
+
+async function fetchGitHubRepos(username) {
+  const url =
+    "https://api.github.com/users/" +
+    encodeURIComponent(username) +
+    "/repos?sort=stars&per_page=5&type=public";
+
+  try {
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      const reposContainer = document.getElementById("github-repos");
+      if (reposContainer) {
+        reposContainer.innerHTML =
+          '<p class="text-slate-400 text-xs mt-3 italic">Repositories unavailable.</p>';
+      }
+      return;
+    }
+
+    const repos = await response.json();
+    renderGitHubRepos(repos);
+  } catch (err) {
+    const reposContainer = document.getElementById("github-repos");
+    if (reposContainer) {
+      reposContainer.innerHTML =
+        '<p class="text-slate-400 text-xs mt-3 italic">Could not load repositories.</p>';
+    }
+  }
+}
+
+function renderGitHubRepos(repos) {
+  const container = document.getElementById("github-repos");
+
+  if (!container) return;
+
+  if (!repos || repos.length === 0) {
+    container.innerHTML =
+      '<p class="text-slate-400 text-xs mt-3 italic">No public repositories.</p>';
+    return;
+  }
+
+  const repoItems = repos
+    .map(function (repo) {
+      const name = escapeHtml(repo.name);
+      const desc = repo.description
+        ? escapeHtml(repo.description)
+        : "No description.";
+      const stars = formatNumber(repo.stargazers_count);
+      const lang = repo.language ? escapeHtml(repo.language) : "";
+      const repoUrl = isSafeUrl(repo.html_url)
+        ? escapeHtml(repo.html_url)
+        : "#";
+
+      return (
+        '<li class="border-t border-slate-100 pt-2 mt-2 first:border-0 first:pt-0 first:mt-0">' +
+        '<a href="' +
+        repoUrl +
+        '" target="_blank" rel="noopener noreferrer" ' +
+        'class="group block hover:bg-slate-50 rounded-md -mx-1 px-1 py-0.5 transition-colors">' +
+        '<div class="flex items-center justify-between gap-2">' +
+        '<span class="font-medium text-slate-700 text-xs group-hover:underline truncate">' +
+        name +
+        "</span>" +
+        '<span class="flex items-center gap-0.5 text-slate-400 text-xs shrink-0">' +
+        '<svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">' +
+        '<path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0' +
+        " 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755" +
+        " 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197" +
+        "-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81" +
+        '.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>' +
+        "</svg>" +
+        stars +
+        "</span>" +
+        "</div>" +
+        '<p class="text-slate-400 text-xs mt-0.5 leading-relaxed truncate">' +
+        desc +
+        "</p>" +
+        (lang
+          ? '<span class="inline-block mt-1 text-xs text-slate-400 bg-slate-100 rounded px-1">' +
+            lang +
+            "</span>"
+          : "") +
+        "</a>" +
+        "</li>"
+      );
+    })
+    .join("");
+
+  container.innerHTML =
+    '<div class="mt-4">' +
+    '<h3 class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Top Repositories</h3>' +
+    "<ul>" +
+    repoItems +
+    "</ul>" +
+    "</div>";
 }
