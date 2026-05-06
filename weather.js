@@ -40,6 +40,7 @@ async function fetchWeather(city) {
 
     const data = await response.json();
     renderWeather(data);
+    fetchForecast(city);
   } catch (err) {
     setError("weather-result", err.message, function () {
       fetchWeather(document.getElementById("weather-input").value.trim());
@@ -107,6 +108,81 @@ async function renderWeather(data) {
     '<p class="font-semibold text-slate-700">' +
     pressure +
     " hPa</p>" +
+    "</div>" +
+    "</div>";
+}
+
+async function fetchForecast(city) {
+  const url =
+    "https://api.openweathermap.org/data/2.5/forecast" +
+    "?q=" +
+    encodeURIComponent(city) +
+    "&appid=" +
+    encodeURIComponent(API_KEYS.openWeather) +
+    "&units=metric";
+
+  try {
+    const response = await fetch(url);
+    if (!response.ok) return;
+
+    const data = await response.json();
+    renderForecast(data.list);
+  } catch (err) {}
+}
+
+function renderForecast(list) {
+  const container = document.getElementById("weather-forecast");
+  if (!container || !list || list.length === 0) return;
+
+  const dailyEntries = list.filter(function (entry) {
+    return entry.dt_txt && entry.dt_txt.includes("12:00:00");
+  });
+
+  const days = dailyEntries.slice(0, 5);
+
+  if (days.length === 0) {
+    container.innerHTML = "";
+    return;
+  }
+
+  const foreCastItems = days
+    .map(function (entry) {
+      const date = new Date(entry.dt * 1000);
+      const dayName = escapeHtml(
+        date.toLocaleDateString("en-GB", {
+          weekday: "short",
+        }),
+      );
+      const temp = Math.round(entry.main.temp);
+      const iconCode = escapeHtml(entry.weather[0].icon);
+      const iconUrl = "https://openweathermap.org/img/wn/" + iconCode + ".png";
+      const desc = escapeHtml(entry.weather[0].description);
+
+      return (
+        '<div class="flex flex-col items-center gap-0.5 bg-sky-50 rounded-lg p-2 min-w-0">' +
+        '<span class="text-xs font-semibold text-slate-600">' +
+        dayName +
+        "</span>" +
+        '<img src="' +
+        iconUrl +
+        '" alt="' +
+        desc +
+        '" class="w-8 h-8" title="' +
+        desc +
+        '">' +
+        '<span class="text-sm font-bold text-slate-800">' +
+        temp +
+        "°</span>" +
+        "</div>"
+      );
+    })
+    .join("");
+
+  container.innerHTML =
+    '<div class="mt-4">' +
+    '<h3 class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">5-Day Forecast</h3>' +
+    '<div class="grid gird-cols-5 gap-1">' +
+    foreCastItems +
     "</div>" +
     "</div>";
 }
