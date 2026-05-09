@@ -166,22 +166,39 @@
           aria-label="Latest technology news headlines"
         >
           <h2
-            class="text-base font-semibold text-slate-700 mb-4 pb-2 border-b border-slate-200 flex items-center gap-2"
+            class="text-base font-semibold text-slate-700 mb-4 pb-2 border-b border-slate-200 flex items-center justify-between gap-2"
           >
-            <span aria-hidden="true" class="text-lg">📰</span>Latest Tech News
+            <span class="flex items-center gap-2"
+              ><span aria-hidden="true" class="text-lg">📰</span>Latest
+              News</span
+            >
+            <span
+              id="news-count"
+              class="text-xs font-normal text-slate-400"
+            ></span>
           </h2>
-          <button
-            id="news-refresh-btn"
-            class="w-full mb-4 bg-emerald-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-1 transition-colors"
-          >
-            Load Headlines
-          </button>
+          <div class="flex gap-2 mb-4">
+            <label for="news-input" class="sr-only">News Topic</label>
+            <input
+              id="news-input"
+              type="text"
+              placeholder="e.g. technology"
+              autocomplete="off"
+              class="flex-1 border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-shadow"
+            />
+            <button
+              id="news-refresh-btn"
+              class="bg-emerald-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-emerald-700 focus:outline-none focus:ring-emerald-500 focus:ring-offset-1 transition-colors"
+            >
+              Search
+            </button>
+          </div>
           <div
             id="news-result"
             class="text-sm text-slate-400 flex-1"
             aria-live="polite"
           >
-            Click "Load Headlines" to fetch the latest news
+            Enter a topic and click search
           </div>
         </section>
       </div>

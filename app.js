@@ -45,11 +45,21 @@ document
   });
 
 // --News Panel--
+const newsInput = document.getElementById("news-input");
+
 document
   .getElementById("news-refresh-btn")
   .addEventListener("click", function () {
-    fetchNews();
+    const topic = newsInput.value.trim() || "technology";
+    saveLastSearch("news", topic);
+    fetchNews(topic);
   });
+
+newsInput.addEventListener("keydown", function (e) {
+  if (e.key === "Enter") {
+    document.getElementById("news-refresh-btn").click();
+  }
+});
 
 // -- Persist Search Request
 function saveLastSearch(panel, value) {
@@ -77,7 +87,16 @@ function loadLastSearches() {
     document.getElementById("weather-input").value = searches.weather;
     fetchWeather(searches.weather);
   }
+
+  if (searches.news) {
+    const newsInput = document.getElementById("news-input");
+    if (newsInput) newsInput.value = searches.news;
+  }
+
+  fetchNews(searches.news || "technology");
 }
 
 loadLastSearches();
-fetchNews();
+if (!localStorage.getItem("dashboard-searches")) {
+  fetchNews("technology");
+}

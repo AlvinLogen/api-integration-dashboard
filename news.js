@@ -1,20 +1,30 @@
-async function fetchNews() {
-  setLoading("news-result", "Loading headlines...");
+// Depends on: utils.js, config.js (API_KEYS.guardian)
+// API docs: https://open-platform.theguardian.com/documentation/
+
+async function fetchNews(topic) {
+  setLoading("news-result", "Fetching headlines...");
+
+  // Clear the article count while loading
+  const countEl = document.getElementById("news-count");
+  if (countEl) countEl.textContent = "";
 
   try {
     const url =
       "https://content.guardianapis.com/search" +
-      "?section=technology" +
-      "&show-fields=trailText" +
+      "?q=" +
+      encodeURIComponent(topic) +
+      "&section=technology|science|business" +
+      "&show-fields=thumbnail,trailText" +
       "&page-size=6" +
       "&order-by=newest" +
       "&api-key=" +
       encodeURIComponent(API_KEYS.guardian);
 
     const response = await fetch(url);
+
     if (!response.ok) {
-      if (response.status === 403) {
-        throw new Error("Invalid Guardian API Key. Check config.js");
+      if (response.status === 401 || response.status === 403) {
+        throw new Error("Invalid Guardian API key. Check config.js");
       }
 
       if (response.status === 429) {
@@ -23,66 +33,79 @@ async function fetchNews() {
         );
       }
 
-      throw new Error("News API error - HTTP status " + response.status + ".");
+      throw new Error(
+        "Guardian API error - HTTP status " + response.status + ".",
+      );
     }
 
     const data = await response.json();
-    renderNews(data.response.results);
+    const articles = data.response.results;
+
+    if (!articles || articles.length === 0) {
+      document.getElementById("news-result").innerHTML =
+        '<p class="text-slate-400 text-sm italic">No articles found for "' +
+        escapeHtml(topic) +
+        '". Try a different topic.</p>';
+      return;
+    }
+
+    if (countEl) {
+      countEl.textContent =
+        articles.length + " article " + (articles.length !== 1 ? "s" : "");
+    }
+
+    renderNews(articles);
   } catch (err) {
-    setError("news-result", err.message, fetchNews);
+    setError("news-result", "err.message");
+    const countEl = document.getElementById("news-count");
+    if (countEl) countEl.textContent = "";
   }
 }
 
-async function renderNews(articles) {
+function renderNews(articles) {
   const container = document.getElementById("news-result");
 
-  if (!articles || articles.length === 0) {
-    container.innerHTML =
-      '<p class="text-slate-400 text-sm">No headlines available right now.</p>';
-    return;
-  }
-
-  const now = new Date().toLocaleTimeString("en-GB", {
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-
-  const articlesHtml = articles
+  const articleCards = articles
     .map(function (article) {
-      const articleUrl = isSafeUrl(article.webUrl)
-        ? escapeHtml(article.webUrl)
-        : "#";
       const title = escapeHtml(article.webTitle);
-
-      const pubDate = new Date(article.webPublicationDate).toLocaleDateString(
-        "en-GB",
-        {
+      const url = isSafeUrl(article.webUrl) ? escapeHtml(article.webUrl) : "#";
+      const date = new Date(article.webPublicationDate);
+      const dateStr = escapeHtml(
+        date.toLocaleDateString("en-GB", {
           day: "numeric",
           month: "short",
           year: "numeric",
-        },
+        }),
       );
 
+      const trailText =
+        article.fields && article.fields.trailText
+          ? escapeHtml(article.fields.trailText)
+          : "";
+
       return (
-        '<article class="pb-3 mb-3 border-b border-slate-100 last:border-0 last:pb-0 last:mb-0">' +
-        '<a href="' +
-        articleUrl +
-        '" target="_blank" rel="noopener noreferrer" ' +
-        'class="font-medium text-slate-700 hover:text-slate-900 hover:underline ' +
-        'text-xs leading-relaxed block mb-1" aria-label="Read">' +
+        '<article class="border-b border-slate-100 pb-3 mb-3 last:border-0 last:pb-0 last:mb-0">' +
+        "<a href=" +
+        url +
+        '" target="_blank" rel="noopener noreferrer" class="group block">' +
+        '<h3 class="text-sm font-medium text-slate-800 group-hover:underline leading-snug">' +
         title +
+        "</h3>" +
+        (trailText
+          ? '<p class="text-slate-500 text-sm mt-1 leading-relaxed line-clamp-2">' +
+            trailText +
+            "</p>"
+          : "") +
+        '<time class="text-slate-400 text-xs mt-1 block" datetime="' +
+        escapeHtml(article.webPublicationDate) +
+        '">' +
+        dateStr +
+        "</time>" +
         "</a>" +
-        '<p class="text-slate-400 text-xs">' +
-        pubDate +
-        "</p>" +
         "</article>"
       );
     })
     .join("");
 
-  container.innerHTML =
-    '<p class="text-slate-300 text-sm mb-3">Updated at ' +
-    now +
-    "</p>" +
-    articlesHtml;
+  container.innerHTML = "<div>" + articleCards + "</div>";
 }
