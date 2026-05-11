@@ -75,7 +75,11 @@ async function fetchNews(topic) {
 
     renderNews(articles);
   } catch (err) {
-    setError("news-result", "err.message");
+    const message =
+      err.message === "Failed to fetch"
+        ? "Could not connect. Check your internet connection and try again."
+        : err.message;
+    setError("news-result", message);
     const countEl = document.getElementById("news-count");
     if (countEl) countEl.textContent = "";
   } finally {
