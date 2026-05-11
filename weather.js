@@ -1,5 +1,30 @@
+let weatherLoading = false;
+
 async function fetchWeather(city) {
+  const validation = validateInput(city, "city name", 85);
+
+  if (!validation.valid) {
+    setError("weather-result", validation.message);
+    return;
+  }
+
+  city = validation.value;
+
+  if (weatherLoading) return;
+
+  weatherLoading = true;
+
+  const btn = document.getElementById("weather-search-btn");
+
+  if (btn) {
+    btn.disabled = true;
+    btn.classList.add("opacity-50", "cursor-not-allowed");
+  }
+
   setLoading("weather-result", "Fetching weather data...");
+
+  const forecastEl = document.getElementById("weather-forecast");
+  if (forecastEl) forecastEl.innerHTML = "";
 
   try {
     const url =
@@ -45,6 +70,12 @@ async function fetchWeather(city) {
     setError("weather-result", err.message, function () {
       fetchWeather(document.getElementById("weather-input").value.trim());
     });
+  } finally {
+    weatherLoading = false;
+    if (btn) {
+      btn.disabled = false;
+      btn.classList.remove("opacity-50", "cursor-not-allowed");
+    }
   }
 }
 

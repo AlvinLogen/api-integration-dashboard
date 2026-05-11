@@ -1,7 +1,26 @@
 // Depends on: utils.js, config.js (API_KEYS.guardian)
 // API docs: https://open-platform.theguardian.com/documentation/
 
+let newsLoading = false;
+
 async function fetchNews(topic) {
+  const validation = validateInput(topic, "topic", 100);
+  if (!validation.valid) {
+    setError("news-result", validation.message);
+    return;
+  }
+
+  topic = validation.value;
+
+  if (newsLoading) return;
+  newsLoading = true;
+
+  const btn = document.getElementById("news-refresh-btn");
+  if (btn) {
+    btn.disabled = true;
+    btn.classList.add("opacity-50", "cursor-not-allowed");
+  }
+
   setLoading("news-result", "Fetching headlines...");
 
   // Clear the article count while loading
@@ -59,6 +78,12 @@ async function fetchNews(topic) {
     setError("news-result", "err.message");
     const countEl = document.getElementById("news-count");
     if (countEl) countEl.textContent = "";
+  } finally {
+    newsLoading = false;
+    if (btn) {
+      btn.disabled = false;
+      btn.classList.remove("opacity-50", "cursor-not-allowed");
+    }
   }
 }
 
