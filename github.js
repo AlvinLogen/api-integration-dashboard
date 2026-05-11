@@ -53,7 +53,11 @@ async function fetchGitHubUser(username) {
     renderGitHubProfile(data);
     fetchGitHubRepos(data.login);
   } catch (err) {
-    setError("github-result", err.message, function () {
+    const message =
+      err.message === "Failed to fetch"
+        ? "Could not connect. Check your internet connection and try again."
+        : err.message;
+    setError("github-result", message, function () {
       fetchGitHubUser(document.getElementById("github-input").value.trim());
     });
   } finally {
@@ -78,10 +82,13 @@ function renderGitHubProfile(data) {
   const bio = data.bio ? escapeHtml(data.bio) : "";
   const location = data.location ? escapeHtml(data.location) : "";
   const blog = data.blog && isSafeUrl(data.blog) ? escapeHtml(data.blog) : "";
+  const repoCount =
+    typeof data.public_repos === "number" ? data.public_repos : 0;
+  const followerCount = typeof data.followers === "number" ? data.followers : 0;
 
   // Account age in years
   const createdYear = new Date(data.created_at).getFullYear();
-  const currentYear = new Date().getFullYear;
+  const currentYear = new Date().getFullYear();
   const accountAge = currentYear - createdYear;
 
   container.innerHTML =
@@ -117,20 +124,20 @@ function renderGitHubProfile(data) {
     '<div class="grid grid-cols-3 gap-2 text-center mb-3">' +
     '<div class="bg-slate-50 rounded-lg p-2">' +
     '<p class="font-bold text-slate-800 text-sm">' +
-    formatNumber(data.public_repos) +
+    repoCount +
     "</p>" +
     '<p class="text-slate-500 text-xs">Repos</p>' +
     "</div>" +
     '<div class="bg-slate-50 rounded-lg p-2">' +
     '<p class="font-bold text-slate-800 text-sm">' +
-    formatNumber(data.followers) +
+    followerCount +
     "</p>" +
     '<p class="text-slate-500 text-xs">Followers</p>' +
     "</div>" +
     '<div class="bg-slate-50 rounded-lg p-2">' +
     '<p class="font-bold text-slate-800 text-sm">' +
     accountAge +
-    "yr" +
+    " Year" +
     (accountAge !== 1 ? "s" : "") +
     "</p>" +
     '<p class="text-slate-500 text-xs">On GitHub</p>' +

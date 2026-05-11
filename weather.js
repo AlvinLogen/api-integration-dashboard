@@ -67,7 +67,11 @@ async function fetchWeather(city) {
     renderWeather(data);
     fetchForecast(city);
   } catch (err) {
-    setError("weather-result", err.message, function () {
+    const message =
+      err.message === "Failed to fetch"
+        ? "Could not connect. Check your internet connection and try again."
+        : err.message;
+    setError("weather-result", message, function () {
       fetchWeather(document.getElementById("weather-input").value.trim());
     });
   } finally {
