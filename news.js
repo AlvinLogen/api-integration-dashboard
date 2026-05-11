@@ -62,7 +62,7 @@ async function fetchNews(topic) {
 
     if (!articles || articles.length === 0) {
       document.getElementById("news-result").innerHTML =
-        '<p class="text-slate-400 text-sm italic">No articles found for "' +
+        '<p class="text-slate-500 text-sm italic">No articles found for "' +
         escapeHtml(topic) +
         '". Try a different topic.</p>';
       return;
@@ -121,7 +121,7 @@ function renderNews(articles) {
             trailText +
             "</p>"
           : "") +
-        '<time class="text-slate-400 text-xs mt-1 block" datetime="' +
+        '<time class="text-slate-500 text-xs mt-1 block" datetime="' +
         escapeHtml(article.webPublicationDate) +
         '">' +
         dateStr +

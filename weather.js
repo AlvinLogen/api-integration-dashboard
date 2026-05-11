@@ -106,7 +106,7 @@ async function renderWeather(data) {
     temp +
     "°</span>" +
     "</div>" +
-    '<p class="text-slate-500 capitalize text-sm mt-1">' +
+    '<p class="text-slate-600 capitalize text-sm mt-1">' +
     description +
     "</p>" +
     '<p class="font-semibold text-slate-700 mt-1">' +
@@ -117,25 +117,25 @@ async function renderWeather(data) {
     "</div>" +
     '<div class="grid grid-cols-2 gap-2 text-sm">' +
     '<div class="bg-sky-50 rounded-lg p-2 text-center">' +
-    '<p class="text-slate-400 text-xs">Feels Like</p>' +
+    '<p class="text-slate-600 text-xs">Feels Like</p>' +
     '<p class="font-semibold text-slate-700">' +
     feelsLike +
     "°C</p>" +
     "</div>" +
     '<div class="bg-sky-50 rounded-lg p-2 text-center">' +
-    '<p class="text-slate-400 text-xs">Humidity</p>' +
+    '<p class="text-slate-600 text-xs">Humidity</p>' +
     '<p class="font-semibold text-slate-700">' +
     humidity +
     "%</p>" +
     "</div>" +
     '<div class="bg-sky-50 rounded-lg p-2 text-center">' +
-    '<p class="text-slate-400 text-xs">Wind</p>' +
+    '<p class="text-slate-600 text-xs">Wind</p>' +
     '<p class="font-semibold text-slate-700">' +
     windSpeed +
     " m/s</p>" +
     "</div>" +
     '<div class="bg-sky-50 rounded-lg p-2 text-center">' +
-    '<p class="text-slate-400 text-xs">Pressure</p>' +
+    '<p class="text-slate-600 text-xs">Pressure</p>' +
     '<p class="font-semibold text-slate-700">' +
     pressure +
     " hPa</p>" +
@@ -211,7 +211,7 @@ function renderForecast(list) {
 
   container.innerHTML =
     '<div class="mt-4">' +
-    '<h3 class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">5-Day Forecast</h3>' +
+    '<h3 class="text-xs font-semibold text-slate-600 uppercase tracking-wider mb-2">5-Day Forecast</h3>' +
     '<div class="grid gird-cols-5 gap-1">' +
     foreCastItems +
     "</div>" +

@@ -103,7 +103,7 @@ function renderGitHubProfile(data) {
     loginName +
     "</p>" +
     (location
-      ? '<p class="text-slate-400 text-xs mt-0.5">📍 ' + location + "</p>"
+      ? '<p class="text-slate-500 text-xs mt-0.5">📍 ' + location + "</p>"
       : "") +
     "</div>" +
     "</div>" +
@@ -119,13 +119,13 @@ function renderGitHubProfile(data) {
     '<p class="font-bold text-slate-800 text-sm">' +
     formatNumber(data.public_repos) +
     "</p>" +
-    '<p class="text-slate-400 text-xs">Repos</p>' +
+    '<p class="text-slate-500 text-xs">Repos</p>' +
     "</div>" +
     '<div class="bg-slate-50 rounded-lg p-2">' +
     '<p class="font-bold text-slate-800 text-sm">' +
     formatNumber(data.followers) +
     "</p>" +
-    '<p class="text-slate-400 text-xs">Followers</p>' +
+    '<p class="text-slate-500 text-xs">Followers</p>' +
     "</div>" +
     '<div class="bg-slate-50 rounded-lg p-2">' +
     '<p class="font-bold text-slate-800 text-sm">' +
@@ -133,7 +133,7 @@ function renderGitHubProfile(data) {
     "yr" +
     (accountAge !== 1 ? "s" : "") +
     "</p>" +
-    '<p class="text-slate-400 text-xs">On GitHub</p>' +
+    '<p class="text-slate-500 text-xs">On GitHub</p>' +
     "</div>" +
     "</div>" +
     // Blog link (if present)
@@ -169,7 +169,7 @@ async function fetchGitHubRepos(username) {
       const reposContainer = document.getElementById("github-repos");
       if (reposContainer) {
         reposContainer.innerHTML =
-          '<p class="text-slate-400 text-xs mt-3 italic">Repositories unavailable.</p>';
+          '<p class="text-slate-500 text-xs mt-3 italic">Repositories unavailable.</p>';
       }
       return;
     }
@@ -180,7 +180,7 @@ async function fetchGitHubRepos(username) {
     const reposContainer = document.getElementById("github-repos");
     if (reposContainer) {
       reposContainer.innerHTML =
-        '<p class="text-slate-400 text-xs mt-3 italic">Could not load repositories.</p>';
+        '<p class="text-slate-500 text-xs mt-3 italic">Could not load repositories.</p>';
     }
   }
 }
@@ -192,7 +192,7 @@ function renderGitHubRepos(repos) {
 
   if (!repos || repos.length === 0) {
     container.innerHTML =
-      '<p class="text-slate-400 text-xs mt-3 italic">No public repositories.</p>';
+      '<p class="text-slate-500 text-xs mt-3 italic">No public repositories.</p>';
     return;
   }
 
@@ -218,7 +218,7 @@ function renderGitHubRepos(repos) {
         '<span class="font-medium text-slate-700 text-xs group-hover:underline truncate">' +
         name +
         "</span>" +
-        '<span class="flex items-center gap-0.5 text-slate-400 text-xs shrink-0">' +
+        '<span class="flex items-center gap-0.5 text-slate-500 text-xs shrink-0">' +
         '<svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">' +
         '<path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0' +
         " 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755" +
@@ -229,11 +229,11 @@ function renderGitHubRepos(repos) {
         stars +
         "</span>" +
         "</div>" +
-        '<p class="text-slate-400 text-xs mt-0.5 leading-relaxed truncate">' +
+        '<p class="text-slate-500 text-xs mt-0.5 leading-relaxed truncate">' +
         desc +
         "</p>" +
         (lang
-          ? '<span class="inline-block mt-1 text-xs text-slate-400 bg-slate-100 rounded px-1">' +
+          ? '<span class="inline-block mt-1 text-xs text-slate-600 bg-slate-100 rounded px-1">' +
             lang +
             "</span>"
           : "") +

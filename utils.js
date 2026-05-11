@@ -60,7 +60,7 @@ function setLoading(containerId, message) {
   if (!container) return;
 
   container.innerHTML =
-    '<div class="flex items-center gap-2 text-slate-400">' +
+    '<div class="flex items-center gap-2 text-slate-500">' +
     '<div class="w-4 h-4 border-2 border-slate-300 border-t-slate-600 rounded-full animate-spin-slow"></div>' +
     "<span>" +
     escapeHtml(message) +
