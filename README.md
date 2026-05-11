@@ -7,11 +7,6 @@ A live data dashboard pulling from three public REST APIs: GitHub, OpenWeatherMa
 - **GitHub Panel** — Search any GitHub username and view their profile, avatar, bio, stats (repos, followers, account age), location, and blog link
 - **Weather Panel** — Search any city for current conditions: temperature, feels like, humidity, wind speed, pressure, and weather icon
 - **News Panel** — Loads the latest 6 technology headlines from The Guardian with publication dates and direct links
-- Each panel fails independently — one API error doesn't affect the other two
-- Last searches (GitHub username + city) are remembered via localStorage and restored on next visit
-- Retry buttons on error states
-- Fully keyboard-navigable with ARIA live regions for screen readers
-- Responsive: single column on mobile, three columns on desktop (Tailwind CSS)
 
 ## Tech Stack
 
@@ -35,25 +30,32 @@ api-dashboard/
 └── .gitignore
 ```
 
+## APIs Used
+
+| API                                                    | Auth          | CORS |
+| ------------------------------------------------------ | ------------- | ---- |
+| [GitHub REST API](https://docs.github.com/en/rest)     | None required | ✓    |
+| [OpenWeatherMap](https://openweathermap.org/api)       | Free API key  | ✓    |
+| [The Guardian](https://open-platform.theguardian.com/) | Free API key  | ✓    |
+
 ## Setup
 
-1. Clone the repo:
-   ```bash
-   git clone https://github.com/YOUR_USERNAME/api-dashboard.git
-   cd api-dashboard
-   ```
-2. Copy the config template:
-   ```bash
-   copy config.example.js config.js
-   ```
-3. Edit `config.js` and add your free API keys:
-   - **OpenWeatherMap**: https://openweathermap.org/api
-   - **The Guardian**: https://open-platform.theguardian.com/access/
-4. Open with Live Server (VS Code extension) — do NOT open `index.html` directly as a file
+1. Clone the repository
+2. Copy `config.example.js` to `config.js`
+3. Add your free API keys to `config.js` (see links in the table above)
+4. Open `index.html` with [Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer) — **do not open directly in the browser**
 
 ## Security Notes
 
-- `config.js` is gitignored — API keys never enter version control
-- All API-returned strings are escaped with `escapeHtml()` before insertion into innerHTML
-- All external links include `rel="noopener noreferrer"`
-- All API-returned URLs are validated with `isSafeUrl()` before use in `href`
+- All API strings are escaped with `escapeHtml()` before DOM insertion
+- All API-returned URLs are validated with `isSafeUrl()` before use in `href` attributes
+- External links use `rel="noopener noreferrer"`
+- API keys are stored in a gitignored `config.js` file, never in version control
+
+## Accessibility
+
+- Skip navigation link
+- All interactive elements have visible focus rings
+- `aria-live="polite"` on all dynamic result regions
+- Semantic HTML (`<section>`, `<article>`, `<time>`)
+- Keyboard-navigable — all actions reachable via Tab + Enter
