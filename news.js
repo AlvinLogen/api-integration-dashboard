@@ -109,11 +109,11 @@ function renderNews(articles) {
           : "";
 
       return (
-        '<article class="border-b border-slate-100 pb-3 mb-3 last:border-0 last:pb-0 last:mb-0">' +
+        '<article class="border-b border-slate-100 pb-3 mb-3 last:border-0 last:pb-0 last:mb-0 focus:outline-none">' +
         "<a href=" +
         url +
-        '" target="_blank" rel="noopener noreferrer" class="group block">' +
-        '<h3 class="text-sm font-medium text-slate-800 group-hover:underline leading-snug">' +
+        '" target="_blank" rel="noopener noreferrer" class="group block ">' +
+        '<h3 class="text-sm font-medium text-slate-800 group-hover:underline leading-snug focus:ring-2 focus:ring-emerald-400 focus:ring-offset-1 rounded">' +
         title +
         "</h3>" +
         (trailText
