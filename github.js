@@ -1,5 +1,33 @@
+let githubLoading = false;
+
 async function fetchGitHubUser(username) {
+  // Validate Input
+  const validation = validateInput(username, "GitHub username", 39);
+
+  if (!validation.valid) {
+    setError("github-result", validation.message);
+    return;
+  }
+
+  username = validation.value;
+
+  // Guard: Reject duplicate requets while in flight
+  if (githubLoading) return;
+
+  githubLoading = true;
+
+  //Disable the button while in flight
+  const btn = document.getElementById("github-search-btn");
+  if (btn) {
+    btn.disabled = true;
+    btn.classList.add("opacity-50", "cursor-not-allowed");
+  }
+
   setLoading("github-result", "Fetching GiHub profile...");
+
+  // Clear repos while loading
+  const reposEl = document.getElementById("github-repos");
+  if (reposEl) reposEl.innerHTML = "";
 
   try {
     const url = "https://api.github.com/users/" + encodeURIComponent(username);
@@ -28,6 +56,13 @@ async function fetchGitHubUser(username) {
     setError("github-result", err.message, function () {
       fetchGitHubUser(document.getElementById("github-input").value.trim());
     });
+  } finally {
+    // Re-enable the button, whether fetch succeeded or failed
+    githubLoading = false;
+    if (btn) {
+      btn.disabled = false;
+      btn.classList.remove("opacity-50", "cursor-not-allowed");
+    }
   }
 }
 

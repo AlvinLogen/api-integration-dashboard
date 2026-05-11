@@ -27,6 +27,32 @@ function isBlank(str) {
   return !str || str.trim().length === 0;
 }
 
+// Validate text input before use in an API call
+
+function validateInput(value, fieldName, maxLength) {
+  maxLength = maxLength || 100;
+
+  if (isBlank(value)) {
+    return { valid: false, message: "Please enter a " + fieldName + "." };
+  }
+
+  const trimmed = value.trim();
+
+  if (trimmed.length > maxLength) {
+    return {
+      valid: false,
+      message:
+        fieldName.charAt(0).toUpperCase() +
+        fieldName.slice(1) +
+        " is too long (max " +
+        maxLength +
+        " characters).",
+    };
+  }
+
+  return { valid: true, value: trimmed };
+}
+
 // Loading State: Let the user know that the task is in progress while waiting for an API response
 function setLoading(containerId, message) {
   message = message || "Loading...";
