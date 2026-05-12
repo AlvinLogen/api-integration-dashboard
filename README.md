@@ -2,6 +2,8 @@
 
 A live data dashboard pulling from three public REST APIs: GitHub, OpenWeatherMap, and The Guardian. Built with vanilla JavaScript and Tailwind CSS.
 
+**[Live Demo](https://alvinlogen.github.io/api-integration-dashboard/)**
+
 ## Features
 
 - **GitHub Panel** — Search any GitHub username and view their profile, avatar, bio, stats (repos, followers, account age), location, and blog link
